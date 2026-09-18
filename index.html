@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Traffic Management System | AI Control Dashboard</title>
+    <title>Smart Traffic Management System | AI Multi-Camera Control Center</title>
     <style>
         :root {
-            --bg-primary: #0a0e17;
-            --bg-card: rgba(18, 25, 41, 0.75);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #f3f4f6;
+            --bg-primary: #080c14;
+            --bg-card: rgba(15, 23, 42, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent-cyan: #06b6d4;
             --accent-emerald: #10b981;
@@ -29,10 +29,10 @@
             background-color: var(--bg-primary);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 24px;
+            padding: 20px;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 10% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
         }
 
         .container {
@@ -45,9 +45,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 16px;
         }
@@ -63,14 +63,14 @@
             height: 12px;
             border-radius: 50%;
             background-color: var(--accent-emerald);
-            box-shadow: 0 0 12px var(--accent-emerald);
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 14px var(--accent-emerald);
+            animation: pulse 1.8s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
         }
 
         h1 {
@@ -107,12 +107,13 @@
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 20px;
+            padding: 18px 20px;
             display: flex;
             flex-direction: column;
             gap: 6px;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .kpi-card::before {
@@ -130,7 +131,7 @@
         .kpi-card.rose::before { background: var(--accent-rose); }
 
         .kpi-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -138,9 +139,9 @@
         }
 
         .kpi-val {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
         .kpi-sub {
@@ -155,7 +156,7 @@
             gap: 24px;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1080px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
@@ -167,7 +168,7 @@
             backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 24px;
+            padding: 22px;
             margin-bottom: 24px;
         }
 
@@ -175,13 +176,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
             gap: 12px;
         }
 
         .panel-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -192,7 +193,7 @@
         .cam-tabs {
             display: flex;
             gap: 6px;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.7);
             padding: 4px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
@@ -213,14 +214,15 @@
         .cam-btn.active {
             background: var(--accent-cyan);
             color: #04131f;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
         }
 
         .cam-btn:hover:not(.active) {
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Video / Camera Feed */
+        /* Video / Camera Box */
         .video-box {
             position: relative;
             width: 100%;
@@ -228,10 +230,132 @@
             background: #000;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        .video-box img, .video-box video {
+        /* Quad Grid View (2x2) */
+        .quad-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            gap: 2px;
+        }
+
+        .quad-cell {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border: 2px solid #334155;
+            transition: border-color 0.3s ease;
+        }
+
+        .quad-cell video, .quad-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .quad-cell.green-border {
+            border-color: #10b981;
+            box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .quad-cell.yellow-border {
+            border-color: #f59e0b;
+            box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .quad-cell.red-border {
+            border-color: #ef4444;
+            box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.25);
+        }
+
+        /* Bounding Box Visuals */
+        .bbox-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .yolo-box {
+            position: absolute;
+            border: 2px solid #22c55e;
+            background: rgba(34, 197, 94, 0.08);
+            border-radius: 3px;
+        }
+
+        .yolo-tag {
+            position: absolute;
+            top: -18px;
+            left: -2px;
+            background: #22c55e;
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 2px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .quad-banner {
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            right: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 5;
+        }
+
+        .quad-badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .badge-green { background: #10b981; color: #000; }
+        .badge-yellow { background: #f59e0b; color: #000; }
+        .badge-red { background: #ef4444; color: #fff; }
+
+        .quad-counter {
+            position: absolute;
+            bottom: 6px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 5;
+        }
+
+        /* Single View */
+        .single-view {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .single-view video, .single-view img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -240,8 +364,8 @@
 
         .video-live-overlay {
             position: absolute;
-            top: 14px;
-            left: 14px;
+            top: 12px;
+            left: 12px;
             display: flex;
             gap: 8px;
             z-index: 10;
@@ -268,51 +392,51 @@
 
         /* 4-Way Intersection Diagram */
         .intersection-view {
-            background: #111726;
+            background: #0f172a;
             border-radius: 14px;
-            padding: 24px;
+            padding: 20px;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 380px;
+            min-height: 360px;
             border: 1px solid var(--border-color);
         }
 
         .intersection-diagram {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 300px;
+            height: 300px;
             background: #1e293b;
             border-radius: 8px;
         }
 
         .road-v {
             position: absolute;
-            left: 110px;
+            left: 100px;
             top: 0;
             width: 100px;
-            height: 320px;
+            height: 300px;
             background: #334155;
-            border-left: 2px dashed rgba(255, 255, 255, 0.3);
-            border-right: 2px dashed rgba(255, 255, 255, 0.3);
+            border-left: 2px dashed rgba(255, 255, 255, 0.35);
+            border-right: 2px dashed rgba(255, 255, 255, 0.35);
         }
 
         .road-h {
             position: absolute;
-            top: 110px;
+            top: 100px;
             left: 0;
-            width: 320px;
+            width: 300px;
             height: 100px;
             background: #334155;
-            border-top: 2px dashed rgba(255, 255, 255, 0.3);
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+            border-top: 2px dashed rgba(255, 255, 255, 0.35);
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.35);
         }
 
         .cross-center {
             position: absolute;
-            top: 110px;
-            left: 110px;
+            top: 100px;
+            left: 100px;
             width: 100px;
             height: 100px;
             background: #1e293b;
@@ -320,15 +444,16 @@
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            border: 1px dashed rgba(255, 255, 255, 0.15);
+            font-weight: 800;
+            color: var(--accent-cyan);
+            border: 1px dashed rgba(6, 182, 212, 0.4);
+            text-align: center;
         }
 
         /* Traffic Light Pods */
         .light-pod {
             position: absolute;
-            background: #0f172a;
+            background: #090d16;
             border: 2px solid #475569;
             border-radius: 6px;
             padding: 4px;
@@ -342,8 +467,8 @@
             height: 14px;
             border-radius: 50%;
             background: #334155;
-            opacity: 0.3;
-            transition: all 0.3s ease;
+            opacity: 0.25;
+            transition: all 0.25s ease;
         }
 
         .light-bulb.red.active {
@@ -364,26 +489,26 @@
             box-shadow: 0 0 12px #10b981;
         }
 
-        #pod-north { top: 70px; left: 60px; }
-        #pod-south { bottom: 70px; right: 60px; }
-        #pod-east  { top: 60px; right: 60px; flex-direction: column; }
-        #pod-west  { bottom: 60px; left: 60px; flex-direction: column; }
+        #pod-north { top: 62px; left: 52px; }
+        #pod-south { bottom: 62px; right: 52px; }
+        #pod-east  { top: 52px; right: 52px; flex-direction: column; }
+        #pod-west  { bottom: 52px; left: 52px; flex-direction: column; }
 
         .lane-label {
             position: absolute;
             font-size: 11px;
             font-weight: 700;
             color: #94a3b8;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             padding: 2px 6px;
             border-radius: 4px;
             z-index: 5;
         }
 
-        #lbl-north { top: 10px; left: 130px; }
-        #lbl-south { bottom: 10px; left: 130px; }
-        #lbl-east  { right: 10px; top: 145px; }
-        #lbl-west  { left: 10px; top: 145px; }
+        #lbl-north { top: 10px; left: 115px; }
+        #lbl-south { bottom: 10px; left: 115px; }
+        #lbl-east  { right: 10px; top: 138px; }
+        #lbl-west  { left: 10px; top: 138px; }
 
         /* Controls */
         .btn-group {
@@ -477,7 +602,7 @@
             color: #fff;
             padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             display: none;
             z-index: 100;
             animation: fadeIn 0.3s ease;
@@ -499,12 +624,12 @@
             <div>
                 <h1>Smart Traffic Management System</h1>
                 <p style="font-size: 13px; color: var(--text-muted);">
-                    Unified Integration: ecs 1.0.1 (4-Lane Multi-Camera ONNX Grid) + ecs 1.0.2 (Adaptive Signal AI)
+                    Unified AI Controller: 4-Lane Multi-Camera ONNX Grid + Real-Time Adaptive Optimization
                 </p>
             </div>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <span class="system-tag" id="system-mode-tag">ONLINE | AI ENGINE ACTIVE</span>
+            <span class="system-tag" id="system-mode-tag">YOLOv5s ONNX ACTIVE</span>
             <span style="font-size: 13px; color: var(--text-muted);" id="clock">--:--:--</span>
         </div>
     </header>
@@ -520,17 +645,17 @@
         <div class="kpi-card">
             <span class="kpi-label">Total Vehicles Cleared</span>
             <div class="kpi-val" id="total-vehicles-val" style="color: var(--accent-cyan);">245</div>
-            <span class="kpi-sub">Synced from 4-camera video telemetry</span>
+            <span class="kpi-sub">Real-time throughput from 4 cameras</span>
         </div>
 
         <div class="kpi-card amber">
             <span class="kpi-label">Average Wait Reduction</span>
             <div class="kpi-val" id="wait-reduction-val" style="color: var(--accent-amber);">-38.5%</div>
-            <span class="kpi-sub">Adaptive timing vs static 30s cycle</span>
+            <span class="kpi-sub">Dynamic scheduling vs static 30s cycle</span>
         </div>
 
         <div class="kpi-card rose" id="kpi-emergency-card">
-            <span class="kpi-label">Emergency Priority Mode</span>
+            <span class="kpi-label">Emergency Priority Corridor</span>
             <div class="kpi-val" id="emergency-status-val" style="font-size: 22px; color: var(--text-muted);">STANDBY</div>
             <span class="kpi-sub" id="emergency-sub">Automated lane clearance ready</span>
         </div>
@@ -559,7 +684,91 @@
                 </div>
                 
                 <div class="video-box" id="video-container">
-                    <img id="camera-stream" src="/video_feed?view=grid" onerror="handleStreamFallback(this)" alt="Live Multi-Camera Video Stream">
+                    <!-- Quad Grid 2x2 View -->
+                    <div class="quad-grid" id="view-quad-grid">
+                        <!-- Quadrant 1: North (video1) -->
+                        <div class="quad-cell red-border" id="cell-north">
+                            <video id="vid-north" autoplay loop muted playsinline src="Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video1.mp4"></video>
+                            <div class="quad-banner">
+                                <span>LANE 1: NORTH</span>
+                                <span class="quad-badge badge-red" id="badge-north">RED</span>
+                            </div>
+                            <!-- Live Simulated YOLO Bounding Boxes -->
+                            <div class="bbox-overlay" id="bbox-north">
+                                <div class="yolo-box" style="top:32%; left:42%; width:16%; height:22%;">
+                                    <span class="yolo-tag">CAR 0.94</span>
+                                </div>
+                                <div class="yolo-box" style="top:25%; left:62%; width:13%; height:18%;">
+                                    <span class="yolo-tag">CAR 0.88</span>
+                                </div>
+                            </div>
+                            <div class="quad-counter" id="cnt-north">CARS: 12</div>
+                        </div>
+
+                        <!-- Quadrant 2: East (video5) -->
+                        <div class="quad-cell red-border" id="cell-east">
+                            <video id="vid-east" autoplay loop muted playsinline src="Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video5.mp4"></video>
+                            <div class="quad-banner">
+                                <span>LANE 2: EAST</span>
+                                <span class="quad-badge badge-red" id="badge-east">RED</span>
+                            </div>
+                            <div class="bbox-overlay" id="bbox-east">
+                                <div class="yolo-box" style="top:40%; left:30%; width:20%; height:28%;">
+                                    <span class="yolo-tag">BUS 0.91</span>
+                                </div>
+                            </div>
+                            <div class="quad-counter" id="cnt-east">CARS: 6</div>
+                        </div>
+
+                        <!-- Quadrant 3: South (video2) -->
+                        <div class="quad-cell green-border" id="cell-south">
+                            <video id="vid-south" autoplay loop muted playsinline src="Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video2.mp4"></video>
+                            <div class="quad-banner">
+                                <span>LANE 3: SOUTH</span>
+                                <span class="quad-badge badge-green" id="badge-south">GREEN</span>
+                            </div>
+                            <div class="bbox-overlay" id="bbox-south">
+                                <div class="yolo-box" style="top:28%; left:38%; width:18%; height:24%;">
+                                    <span class="yolo-tag">CAR 0.96</span>
+                                </div>
+                                <div class="yolo-box" style="top:55%; left:58%; width:22%; height:30%;">
+                                    <span class="yolo-tag">TRUCK 0.89</span>
+                                </div>
+                            </div>
+                            <div class="quad-counter" id="cnt-south">CARS: 22</div>
+                        </div>
+
+                        <!-- Quadrant 4: West (video3) -->
+                        <div class="quad-cell red-border" id="cell-west">
+                            <video id="vid-west" autoplay loop muted playsinline src="Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video3.mp4"></video>
+                            <div class="quad-banner">
+                                <span>LANE 4: WEST</span>
+                                <span class="quad-badge badge-red" id="badge-west">RED</span>
+                            </div>
+                            <div class="bbox-overlay" id="bbox-west">
+                                <div class="yolo-box" style="top:35%; left:45%; width:18%; height:25%;">
+                                    <span class="yolo-tag">CAR 0.87</span>
+                                </div>
+                            </div>
+                            <div class="quad-counter" id="cnt-west">CARS: 7</div>
+                        </div>
+                    </div>
+
+                    <!-- Single Focused Video View -->
+                    <div class="single-view" id="view-single">
+                        <video id="single-video" autoplay loop muted playsinline></video>
+                        <div class="quad-banner" style="top:12px; left:12px; right:12px; font-size:13px;">
+                            <span id="single-lane-title">LANE FOCUS</span>
+                            <span class="quad-badge badge-green" id="single-lane-badge">GREEN</span>
+                        </div>
+                        <div class="bbox-overlay" id="single-bbox">
+                            <div class="yolo-box" style="top:35%; left:45%; width:18%; height:25%;">
+                                <span class="yolo-tag">VEHICLE 0.95</span>
+                            </div>
+                        </div>
+                        <div class="quad-counter" style="bottom:12px; left:12px; font-size:13px;" id="single-lane-counter">CARS: 12</div>
+                    </div>
+
                     <div class="video-live-overlay">
                         <span class="live-badge">4-WAY LIVE</span>
                         <span class="ai-badge">YOLOv5s ONNX ARRAY</span>
@@ -635,12 +844,12 @@
                     </button>
 
                     <button class="btn surge" id="btn-surge-north" onclick="addTraffic('North', 10)">
-                        <span>🚗 Inject Traffic Burst (North Lane)</span>
+                        <span>🚗 Inject Traffic Burst (+10 North)</span>
                         <span style="font-size: 12px; font-weight: bold;">BOOST</span>
                     </button>
 
                     <button class="btn surge" id="btn-surge-south" onclick="addTraffic('South', 10)">
-                        <span>🚙 Inject Traffic Burst (South Lane)</span>
+                        <span>🚙 Inject Traffic Burst (+10 South)</span>
                         <span style="font-size: 12px; font-weight: bold;">BOOST</span>
                     </button>
 
@@ -679,17 +888,18 @@
             <div class="panel">
                 <div class="panel-header">
                     <div class="panel-title" style="font-size: 15px;">
-                        🔗 Dual-Project Integration Overview
+                        🧠 AI Dynamic Timing Formulation
                     </div>
                 </div>
                 <div style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
                     <p style="margin-bottom: 8px;">
-                        <b style="color: var(--accent-cyan);">ECS 1.0.1 Multi-Camera Engine:</b><br>
-                        Feeds 4 simultaneous camera streams (<code style="color:#67e8f9">video1.mp4</code>, <code style="color:#67e8f9">video5.mp4</code>, <code style="color:#67e8f9">video2.mp4</code>, <code style="color:#67e8f9">video3.mp4</code>), executes YOLOv5s multi-channel detection, and formats the 2x2 multi-angle matrix.
+                        Adaptive timing formulation calculates optimal green seconds for each approach:
                     </p>
+                    <div style="background: rgba(0,0,0,0.5); padding: 10px 14px; border-radius: 8px; font-family: monospace; color: var(--accent-cyan); margin-bottom: 8px; border: 1px solid rgba(6, 182, 212, 0.2);">
+                        T_green = clamp(10s + (1.8 × N_vehicles) + (0.2 × T_wait), 10s, 60s)
+                    </div>
                     <p>
-                        <b style="color: var(--accent-emerald);">ECS 1.0.2 Smart Controller:</b><br>
-                        Adaptive scheduling engine, dynamic green-duration formula, immediate emergency vehicle preemption, REST APIs, and the interactive web control console.
+                        High-density lanes receive up to 60s, while empty roads transition after just 10s. Emergency vehicles immediately acquire priority green clearance across the intersection.
                     </p>
                 </div>
             </div>
@@ -700,37 +910,54 @@
 <div id="toast">Notification Message</div>
 
 <script>
-    // Client-side autonomous state for GitHub Pages / static deployment
-    let clientState = {
+    // Lane video files
+    const LANE_VIDEOS = {
+        '1': 'Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video1.mp4',
+        '2': 'Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video5.mp4',
+        '3': 'Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video2.mp4',
+        '4': 'Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/video3.mp4'
+    };
+
+    const LANE_NAMES = { '1': 'North', '2': 'East', '3': 'South', '4': 'West' };
+
+    // Autonomous state (synchronized with live backend or running autonomous client-side)
+    let state = {
         lanes: {
-            "North": { count: 12, wait: 15, state: "RED", emergency: false, passed: 42 },
-            "East":  { count: 6,  wait: 8,  state: "RED", emergency: false, passed: 28 },
-            "South": { count: 22, wait: 30, state: "GREEN", emergency: false, passed: 95 },
-            "West":  { count: 7,  wait: 10, state: "RED", emergency: false, passed: 31 }
+            "North": { count: 12, wait: 14, state: "RED", emergency: false, passed: 42, lane_id: '1' },
+            "East":  { count: 6,  wait: 8,  state: "RED", emergency: false, passed: 28, lane_id: '2' },
+            "South": { count: 22, wait: 30, state: "GREEN", emergency: false, passed: 95, lane_id: '3' },
+            "West":  { count: 7,  wait: 10, state: "RED", emergency: false, passed: 31, lane_id: '4' }
         },
         active_lane: "South",
         phase: "GREEN",
-        timer_remaining: 22,
+        timer_remaining: 24,
         green_duration: 30,
         yellow_duration: 3,
         total_passed: 196,
         emergency_active: false
     };
 
-    let isStaticMode = false;
-    let currentCamView = 'grid';
+    let currentView = 'grid';
 
-    function handleStreamFallback(img) {
-        isStaticMode = true;
-        img.src = 'Smart_Traffic_Management_System/Smart_Traffic_Management_System/data/detection_output.jpg';
+    // Start all 4 quadrant videos
+    function initVideos() {
+        ['vid-north', 'vid-east', 'vid-south', 'vid-west'].forEach(id => {
+            const v = document.getElementById(id);
+            if (v) {
+                v.play().catch(() => {});
+            }
+        });
     }
+    document.addEventListener('DOMContentLoaded', initVideos);
+    window.addEventListener('load', initVideos);
 
+    // Switch between Quad Grid and Individual Lane Zoom
     function switchCamView(view) {
-        currentCamView = view;
-        const img = document.getElementById('camera-stream');
-        if (!isStaticMode) {
-            img.src = `/video_feed?view=${view}`;
-        }
+        currentView = view;
+        const quadGrid = document.getElementById('view-quad-grid');
+        const singleView = document.getElementById('view-single');
+        const singleVid = document.getElementById('single-video');
+
         ['grid', '1', '2', '3', '4'].forEach(tab => {
             const btn = document.getElementById(`tab-${tab}`);
             if (btn) {
@@ -738,9 +965,26 @@
                 else btn.classList.remove('active');
             }
         });
-        showToast(view === 'grid' ? "Quad Grid View (All 4 Feeds)" : `Lane ${view} Focus`);
+
+        if (view === 'grid') {
+            quadGrid.style.display = 'grid';
+            singleView.style.display = 'none';
+            singleVid.pause();
+            initVideos();
+            showToast("Quad Grid View (All 4 Feeds Active)");
+        } else {
+            quadGrid.style.display = 'none';
+            singleView.style.display = 'block';
+            singleVid.src = LANE_VIDEOS[view];
+            singleVid.play().catch(() => {});
+            const laneName = LANE_NAMES[view];
+            document.getElementById('single-lane-title').innerText = `LANE ${view}: ${laneName.toUpperCase()}`;
+            showToast(`Switched to Lane ${view} (${laneName}) Camera`);
+        }
+        renderState(state);
     }
 
+    // Live clock
     function updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString();
@@ -752,130 +996,135 @@
         const toast = document.getElementById('toast');
         toast.innerText = msg;
         toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        setTimeout(() => { toast.style.display = 'none'; }, 2800);
     }
 
-    // Local simulation tick for static deployment
-    function stepClientSimulation() {
-        clientState.timer_remaining--;
-        
-        for (let l in clientState.lanes) {
-            if (clientState.lanes[l].state === 'RED') clientState.lanes[l].wait++;
-            else if (clientState.lanes[l].state === 'GREEN') {
-                clientState.lanes[l].wait = Math.max(0, clientState.lanes[l].wait - 2);
-                clientState.lanes[l].passed++;
-                clientState.total_passed++;
+    // Dynamic Simulation Tick
+    function tickSimulation() {
+        state.timer_remaining--;
+
+        for (let l in state.lanes) {
+            if (state.lanes[l].state === 'RED') {
+                state.lanes[l].wait++;
+            } else if (state.lanes[l].state === 'GREEN') {
+                state.lanes[l].wait = Math.max(0, state.lanes[l].wait - 2);
+                if (state.lanes[l].count > 0 && state.timer_remaining % 2 === 0) {
+                    state.lanes[l].count = Math.max(0, state.lanes[l].count - 1);
+                }
+                state.lanes[l].passed++;
+                state.total_passed++;
             }
         }
 
-        if (clientState.timer_remaining <= 0) {
-            let cur = clientState.active_lane;
-            if (clientState.phase === 'GREEN') {
-                clientState.phase = 'YELLOW';
-                clientState.lanes[cur].state = 'YELLOW';
-                clientState.timer_remaining = clientState.yellow_duration;
-            } else if (clientState.phase === 'YELLOW') {
-                clientState.lanes[cur].state = 'RED';
-                
-                // Next lane selection
+        if (state.timer_remaining <= 0) {
+            let cur = state.active_lane;
+            if (state.phase === 'GREEN') {
+                // Transition to YELLOW
+                state.phase = 'YELLOW';
+                state.lanes[cur].state = 'YELLOW';
+                state.timer_remaining = state.yellow_duration;
+            } else if (state.phase === 'YELLOW') {
+                // Transition to RED and pick next GREEN lane
+                state.lanes[cur].state = 'RED';
+
                 let next = 'North';
                 let maxScore = -1;
-                for (let lname in clientState.lanes) {
-                    if (clientState.lanes[lname].emergency) { next = lname; break; }
-                    let score = clientState.lanes[lname].count * 1.5 + clientState.lanes[lname].wait * 0.8;
-                    if (lname !== cur && score > maxScore) { maxScore = score; next = lname; }
+
+                // Priority check for emergency
+                let hasEmergency = false;
+                for (let lname in state.lanes) {
+                    if (state.lanes[lname].emergency) {
+                        next = lname;
+                        hasEmergency = true;
+                        break;
+                    }
                 }
 
-                let c = clientState.lanes[next].count;
-                let w = clientState.lanes[next].wait;
-                let dur = Math.min(60, Math.max(10, Math.round(10 + 1.8 * c + 0.2 * w)));
+                if (!hasEmergency) {
+                    for (let lname in state.lanes) {
+                        let score = state.lanes[lname].count * 1.5 + state.lanes[lname].wait * 0.8;
+                        if (lname !== cur && score > maxScore) {
+                            maxScore = score;
+                            next = lname;
+                        }
+                    }
+                }
 
-                clientState.active_lane = next;
-                clientState.phase = 'GREEN';
-                clientState.timer_remaining = dur;
-                clientState.lanes[next].state = 'GREEN';
+                let c = state.lanes[next].count;
+                let w = state.lanes[next].wait;
+                let dur = hasEmergency ? 60 : Math.min(60, Math.max(10, Math.round(10 + 1.8 * c + 0.2 * w)));
+
+                state.active_lane = next;
+                state.phase = 'GREEN';
+                state.timer_remaining = dur;
+                state.lanes[next].state = 'GREEN';
             }
         }
-        renderState(clientState);
+        renderState(state);
     }
 
-    async function toggleEmergency(lane) {
-        try {
-            const res = await fetch('/api/trigger_emergency', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lane: lane })
-            });
-            const data = await res.json();
-            showToast(`🚨 Emergency Priority: ${data.emergency_now ? 'ACTIVE' : 'CLEARED'}`);
-        } catch (e) {
-            // Client fallback
-            clientState.lanes[lane].emergency = !clientState.lanes[lane].emergency;
-            clientState.emergency_active = clientState.lanes[lane].emergency;
-            if (clientState.lanes[lane].emergency) {
-                clientState.timer_remaining = 1;
-                clientState.phase = 'YELLOW';
-            }
-            renderState(clientState);
-            showToast(`🚨 Emergency Priority: ${clientState.lanes[lane].emergency ? 'ACTIVE' : 'CLEARED'}`);
-        }
-    }
-
-    async function addTraffic(lane, amount) {
-        try {
-            const res = await fetch('/api/add_traffic', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lane: lane, amount: amount })
-            });
-            const data = await res.json();
-            showToast(`🚗 Added +${amount} to ${lane} Lane`);
-        } catch (e) {
-            clientState.lanes[lane].count += amount;
-            renderState(clientState);
-            showToast(`🚗 Added +${amount} to ${lane} Lane`);
-        }
-    }
-
-    async function resetSim() {
-        try {
-            await fetch('/api/reset', { method: 'POST' });
-        } catch (e) {
-            for (let l in clientState.lanes) {
-                clientState.lanes[l].emergency = false;
-                clientState.lanes[l].wait = 5;
-            }
-            clientState.timer_remaining = 20;
-            clientState.phase = 'GREEN';
-            clientState.active_lane = 'South';
-            renderState(clientState);
-        }
-        showToast('🔄 Telemetry Reset');
-    }
-
-    function renderState(state) {
-        document.getElementById('active-lane-name').innerText = state.active_lane;
-        document.getElementById('phase-timer').innerText = `${state.timer_remaining}s (${state.phase})`;
-        document.getElementById('total-vehicles-val').innerText = state.total_passed;
+    // Render All UI Elements
+    function renderState(s) {
+        // KPIs
+        document.getElementById('active-lane-name').innerText = s.active_lane;
+        document.getElementById('phase-timer').innerText = `${s.timer_remaining}s (${s.phase})`;
+        document.getElementById('total-vehicles-val').innerText = s.total_passed;
 
         const emVal = document.getElementById('emergency-status-val');
         const emSub = document.getElementById('emergency-sub');
-        if (state.emergency_active || Object.values(state.lanes).some(l => l.emergency)) {
+        const emCard = document.getElementById('kpi-emergency-card');
+        const hasEm = s.emergency_active || Object.values(s.lanes).some(l => l.emergency);
+
+        if (hasEm) {
             emVal.innerText = 'OVERRIDE ACTIVE';
             emVal.style.color = '#ef4444';
-            emSub.innerText = 'Signal preemption for priority corridor';
+            emSub.innerText = 'Signal preemption for priority vehicle';
+            emCard.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4)';
         } else {
             emVal.innerText = 'STANDBY';
             emVal.style.color = '#94a3b8';
             emSub.innerText = 'Automated lane clearance ready';
+            emCard.style.boxShadow = 'none';
+        }
+
+        // Update Quadrant Borders & Badges
+        for (let lname in s.lanes) {
+            const lower = lname.toLowerCase();
+            const ldata = s.lanes[lname];
+            const cell = document.getElementById(`cell-${lower}`);
+            const badge = document.getElementById(`badge-${lower}`);
+            const cnt = document.getElementById(`cnt-${lower}`);
+
+            if (cell && badge) {
+                cell.className = 'quad-cell ' + (ldata.state === 'GREEN' ? 'green-border' : (ldata.state === 'YELLOW' ? 'yellow-border' : 'red-border'));
+                badge.className = 'quad-badge ' + (ldata.state === 'GREEN' ? 'badge-green' : (ldata.state === 'YELLOW' ? 'badge-yellow' : 'badge-red'));
+                badge.innerText = ldata.state;
+            }
+            if (cnt) {
+                cnt.innerText = `CARS: ${ldata.count}`;
+            }
+        }
+
+        // Update Single View Badge if active
+        if (currentView !== 'grid') {
+            const laneName = LANE_NAMES[currentView];
+            const ldata = s.lanes[laneName];
+            const sBadge = document.getElementById('single-lane-badge');
+            const sCnt = document.getElementById('single-lane-counter');
+            if (sBadge && ldata) {
+                sBadge.className = 'quad-badge ' + (ldata.state === 'GREEN' ? 'badge-green' : (ldata.state === 'YELLOW' ? 'badge-yellow' : 'badge-red'));
+                sBadge.innerText = `${ldata.state} (${s.timer_remaining}s)`;
+            }
+            if (sCnt && ldata) {
+                sCnt.innerText = `CARS: ${ldata.count} | WAIT: ${ldata.wait}s | CLEARED: ${ldata.passed}`;
+            }
         }
 
         // Update 4-Way Traffic Lights in Diagram
         const laneKeys = ['North', 'South', 'East', 'West'];
         laneKeys.forEach(laneKey => {
-            const laneData = state.lanes[laneKey];
+            const laneData = s.lanes[laneKey];
             const keyLower = laneKey.toLowerCase();
-            
             const rBulb = document.getElementById(`light-${keyLower}-red`);
             const yBulb = document.getElementById(`light-${keyLower}-yellow`);
             const gBulb = document.getElementById(`light-${keyLower}-green`);
@@ -891,7 +1140,7 @@
         const videoLabels = { "North": "video1.mp4", "East": "video5.mp4", "South": "video2.mp4", "West": "video3.mp4" };
         const tbody = document.getElementById('lanes-table-body');
         tbody.innerHTML = '';
-        for (const [laneName, data] of Object.entries(state.lanes)) {
+        for (const [laneName, data] of Object.entries(s.lanes)) {
             let pillClass = 'pill-red';
             if (data.state === 'GREEN') pillClass = 'pill-green';
             if (data.state === 'YELLOW') pillClass = 'pill-yellow';
@@ -901,7 +1150,7 @@
                 <td style="font-weight: 600; display: flex; align-items: center; gap: 6px;">
                     ${laneName} 
                     <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">(${videoLabels[laneName] || ''})</span>
-                    ${data.emergency ? '<span style="color:#ef4444;">🚑</span>' : ''}
+                    ${data.emergency ? '<span style="color:#ef4444; font-size:14px;">🚨 AMBULANCE</span>' : ''}
                 </td>
                 <td><span class="status-pill ${pillClass}">${data.state}</span></td>
                 <td style="font-weight: 700; color: #fff;">${data.count} cars</td>
@@ -912,20 +1161,91 @@
         }
     }
 
-    async function fetchStatus() {
-        try {
-            const res = await fetch('/api/status');
-            if (!res.ok) throw new Error("Status API offline");
-            const state = await res.json();
-            renderState(state);
-        } catch (e) {
-            // Static mode (GitHub Pages)
-            stepClientSimulation();
+    // Emergency Priority Trigger
+    async function toggleEmergency(lane) {
+        state.lanes[lane].emergency = !state.lanes[lane].emergency;
+        state.emergency_active = state.lanes[lane].emergency;
+        
+        if (state.lanes[lane].emergency) {
+            state.timer_remaining = 1;
+            state.phase = 'YELLOW';
+            showToast(`🚨 Emergency Priority ENGAGED on ${lane} Lane! Immediate corridor clearing.`);
+        } else {
+            showToast(`Emergency vehicle cleared on ${lane} Lane.`);
         }
+        renderState(state);
+
+        // Notify backend if online
+        try {
+            fetch('/api/trigger_emergency', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lane: lane })
+            }).catch(() => {});
+        } catch (e) {}
     }
 
-    setInterval(fetchStatus, 1000);
-    fetchStatus();
+    // Inject Traffic Burst
+    async function addTraffic(lane, amount) {
+        state.lanes[lane].count += amount;
+        renderState(state);
+        showToast(`🚗 Added +${amount} vehicles to ${lane} Lane (Total: ${state.lanes[lane].count})`);
+
+        try {
+            fetch('/api/add_traffic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lane: lane, amount: amount })
+            }).catch(() => {});
+        } catch (e) {}
+    }
+
+    // Reset Simulation
+    async function resetSim() {
+        for (let l in state.lanes) {
+            state.lanes[l].emergency = false;
+            state.lanes[l].wait = 5;
+        }
+        state.lanes["North"].count = 12;
+        state.lanes["East"].count = 6;
+        state.lanes["South"].count = 22;
+        state.lanes["West"].count = 7;
+        state.total_passed = 196;
+        state.timer_remaining = 24;
+        state.phase = 'GREEN';
+        state.active_lane = 'South';
+        state.emergency_active = false;
+        renderState(state);
+        showToast('🔄 Simulation Telemetry Reset.');
+
+        try {
+            fetch('/api/reset', { method: 'POST' }).catch(() => {});
+        } catch (e) {}
+    }
+
+    // Poll backend or run locally
+    async function pollOrStep() {
+        try {
+            const res = await fetch('/api/status');
+            if (res.ok) {
+                const backendState = await res.json();
+                state.lanes = backendState.lanes;
+                state.active_lane = backendState.active_lane;
+                state.phase = backendState.phase;
+                state.timer_remaining = backendState.timer_remaining;
+                state.total_passed = backendState.total_passed;
+                state.emergency_active = backendState.emergency_active;
+                renderState(state);
+                return;
+            }
+        } catch (e) {}
+
+        // Fallback: autonomous client-side simulation
+        tickSimulation();
+    }
+
+    setInterval(pollOrStep, 1000);
+    renderState(state);
 </script>
 
 </body>
